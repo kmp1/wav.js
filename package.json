@@ -1,14 +1,14 @@
 {
-  "name": "wave-writer",
+  "name": "wav.js",
   "version": "0.1.0",
   "description": "A javascript API for writing .wav files (that can be run in as old a browser as I can make it).",
-  "main": "wave-writer.js",
+  "main": "wav.js",
   "scripts": {
     "test": "grunt nodeunit"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kmp1/wave-writer.git"
+    "url": "https://github.com/kmp1/wav.js.git"
   },
   "keywords": [
     "wav",
@@ -21,7 +21,7 @@
     "pcm"
   ],
   "author": "Kevin Phillips",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/kmp1/wave-writer/issues"
   },
