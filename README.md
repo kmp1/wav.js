@@ -1,8 +1,3 @@
-<<<<<<< HEAD
 # wav.js
-A javascript .wav file API
-=======
+A javascript .wav file API - go [here](http://kmp1.github.io/wav.js) for a better view of this branch and [here](http://www.github.com/kmp1/wav.js) for the source.
 
-This is a compressed-commit version of
-[github.com/t413/SinglePaged](https://github.com/t413/SinglePaged)
->>>>>>> singlepage/publish
