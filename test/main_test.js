@@ -1,12 +1,12 @@
-var wav_js = require("../src/wav.js");
+var wav = require("../src/wav.js");
 
 exports.testBasicEightBitWavCreation = function(test){
 
-	var wav = wav_js.create(1, 44100, wav_js.BitSize.EIGHT);
-	wav.addSample(0);
-	wav.addSample(100);
-	wav.addSample(200);
-	res = wav.toByteArray();
+	var wave = wav.create(1, 44100, wav.BitSize.EIGHT);
+	wave.addSample(0);
+	wave.addSample(100);
+	wave.addSample(200);
+	res = wave.toByteArray();
 
 	test.equal(res.length, 47, "wav file data is correct length");
 

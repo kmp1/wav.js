@@ -21,7 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-var wav_js = (function () {
+var wav = (function () {
 
     "use strict";
 
@@ -247,6 +247,6 @@ var wav_js = (function () {
 }());
 
 if (typeof (exports) !== "undefined") {
-    exports.create = wav_js.create;
-    exports.BitSize = wav_js.BitSize;
+    exports.create = wav.create;
+    exports.BitSize = wav.BitSize;
 }
