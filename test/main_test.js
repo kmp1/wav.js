@@ -2,7 +2,7 @@ var wav = require("../src/wav.js");
 
 exports.testBasicEightBitWavCreation = function(test){
 
-	var wave = wav.create(1, 44100, wav.BitSize.EIGHT);
+	var wave = wav.create(1, 44100, wav.SampleSize.EIGHT);
 	wave.addSample(0);
 	wave.addSample(100);
 	wave.addSample(200);

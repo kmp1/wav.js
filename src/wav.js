@@ -21,6 +21,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+/*jslint passfail: false,
+    ass: false,
+    bitwise: true,
+    continue: false,
+    debug: false,
+    eqeq: false,
+    evil: false,
+    forin: false,
+    newcap: false,
+    nomen: false,
+    plusplus: false,
+    regexp: false,
+    unparam: false,
+    sloppy: false,
+    stupid: false,
+    sub: false,
+    todo: true,
+    vars: false,
+    white: false,
+    maxlen: 80 */
 var wav = (function () {
 
     "use strict";
@@ -29,7 +49,7 @@ var wav = (function () {
      * This enumeration lists out the bit sizes permitted
      * by the wave-writer implementation.
      */
-    var BitSize = {
+    var SampleSize = {
         /** Eight bits per sample */
         EIGHT: 8,
         /** Sixteen bits per sample */
@@ -39,17 +59,20 @@ var wav = (function () {
     function toTwosComplement16(value) {
 
         if (value > 32767) {
-            throw "Cannot convert value " + value + " to 16 bit two's complement form as it is too large.";
+            throw "Cannot convert value " + value + " to 16 bit two's " +
+                "complement form as it is too large.";
         }
 
         if (value < -32768) {
-            throw "Cannot convert value " + value + " to 16 bit two's complement form as it is too small.";
+            throw "Cannot convert value " + value + " to 16 bit two's " +
+                "complement form as it is too small.";
         }
 
         var low15Bits = value & 0x7fff;
 
         if (value > 0) {
-            // If it is positive, just get the lowest 15 bits since the sign bit is 0
+            // If it is positive, just get the lowest 15 bits since the sign
+            // bit is 0
             return low15Bits;
         }
 
@@ -59,8 +82,10 @@ var wav = (function () {
 
     function WaveFile(channelCount, sampleRate, bitsPerSample) {
 
-        if (bitsPerSample !== BitSize.EIGHT && bitsPerSample !== BitSize.SIXTEEN) {
-            throw "Bits per sample size " + bitsPerSample + " is not supported.";
+        if (bitsPerSample !== SampleSize.EIGHT &&
+                bitsPerSample !== SampleSize.SIXTEEN) {
+            throw "Bits per sample size " + bitsPerSample +
+                " is not supported.";
         }
 
         var byteRate, blockAlign, subChunk1Size, data, subChunk2SizeIndex,
@@ -99,9 +124,19 @@ var wav = (function () {
         return {
 
             /**
-             * Gets the frequency of the wav data.
+             * Gets the frequency of the wave data.
              */
-            frequency: sampleRate,
+            getFrequency: function () { return sampleRate; },
+
+            /**
+             * Gets the number of channels in the wave data.
+             */
+            getChannelCount: function () { return channelCount; },
+
+            /**
+             * Gets the number of bits per sample in the wave data.
+             */
+            getSampleSize: function () { return bitsPerSample; },
 
             /**
              * Add a sample to all the channels in the wave data
@@ -145,10 +180,11 @@ var wav = (function () {
                     data.push(0);
                 }
 
-                if (bitsPerSample === BitSize.EIGHT) {
+                if (bitsPerSample === SampleSize.EIGHT) {
 
                     if (sample < 0 || sample > 255) {
-                        throw "Sample " + sample + " is out of range for 8 bits per sample (should be 0 to 255).";
+                        throw "Sample " + sample + " is out of range for 8 " +
+                            "bits per sample (should be 0 to 255).";
                     }
 
                     data.push(sample & 0xff);
@@ -208,12 +244,14 @@ var wav = (function () {
             /**
              * Gets the total number of samples in the data.
              *
-             * @return The total number of samples in the data (if there are multiple
-             * channels this may not be what you expect - see getSampleCountInOneChannel).
+             * @return The total number of samples in the data (if there are
+             * multiple channels this may not be what you expect - see
+             * getSampleCountInOneChannel).
              */
             getTotalSampleCount: function () {
-                var totalSampleCount = this.getDataChunkSize() / (bitsPerSample / 8);
-                return totalSampleCount;
+                var allSamples = this.getDataChunkSize() / (bitsPerSample / 8);
+
+                return allSamples;
             },
 
             /**
@@ -222,31 +260,36 @@ var wav = (function () {
              * @return The number of samples in a single channel.
              */
             getSampleCountInOneChannel: function () {
-                var sampleCountInOneChannel = this.getTotalSampleCount() / channelCount;
-                return sampleCountInOneChannel;
+                var sampsInOneChan = this.getTotalSampleCount() / channelCount;
+
+                return sampsInOneChan;
             }
         };
     }
 
     return {
 
-        BitSize: BitSize,
+        SampleSize: SampleSize,
 
         /**
-         * Construct a new wav file instance.  This creates a PCM encoded wave file
-         * (uncompressed).
+         * Construct a new wav file instance.  This creates a PCM encoded wave
+         * file (so isuncompressed).
          *
-         * @param {Number} channelCount The number of channels (1 = mono, 2 = stereo, etc)
+         * @param {Number} channelCount The number of channels (1 = mono, 2 =
+         * stereo, etc)
          * @param {Number} sampleRate The sample rate (8000, 44100, etc)
-         * @param {Number} bitsPerSample The number of bits per sample - see WaveFile.BitSize
+         * @param {Number} bitsPerSample The number of bits per sample - see
+         * WaveFile.SampleSize
          *
          * @return A new WaveFile instance.
          */
-        create: WaveFile
+        create: function (channelCount, sampleRate, bitsPerSample) {
+            return new WaveFile(channelCount, sampleRate, bitsPerSample);
+        }
     };
 }());
 
 if (typeof (exports) !== "undefined") {
     exports.create = wav.create;
-    exports.BitSize = wav.BitSize;
+    exports.SampleSize = wav.SampleSize;
 }
